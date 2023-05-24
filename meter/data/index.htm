@@ -1,0 +1,178 @@
+<!--
+Experimental
+-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>All-In-One meter</title>
+  <meta http-equiv="cache-control" content="no-cache" />
+  <style>
+    /* Set the height and width of the HTML and body elements to 100% */
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+    }
+
+    /* Set the font size of the root element to 1vw */
+    html {
+      font-size: 3vw;
+    }
+
+    /* Set the font size of other elements relative to the root element */
+    body {
+      font-size: 1.6rem;
+      /* equivalent to 16px */
+    }
+
+    .rotary-encoder {
+      position: relative;
+      width: 800px;
+      height: 800px;
+      border-radius: 50%;
+      background-color: #f0f0f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: auto;
+    }
+
+    .knob {
+      position: absolute;
+      width: 50%;
+      height: 50%;
+      background-color: #888;
+      border-radius: 50%;
+    }
+
+    .ticks {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      transform: rotate(0deg);
+    }
+
+    .tick {
+      width: 4px;
+      height: 100px;
+      background-color: #000;
+      transform-origin: bottom center;
+      transform: rotate(0deg);
+    }
+  </style>
+
+  <script script type="text/javascript">
+    const Http = new XMLHttpRequest();
+    let url = 'http://aiometer.local/remote?';
+    let ticksElement, knobElement;
+    let startX, startY;
+    var is_pressed = false;
+    let http_response; //Server response
+    //let http_timer = setInterval(http_request, 100000);
+
+
+    function handleKnobTouchStart(event) {
+      if (http_response === "")
+        return;
+      setTimeout(function () { //"Debounce"
+        knobElement.style.backgroundColor = "#770";
+        is_pressed = !is_pressed;
+        http_request(0, is_pressed);
+      }, 500);
+    }
+
+      function handleTouchMove(event) {
+        event.preventDefault();
+        let deltaX = event.touches[0].clientX - startX;
+        let deltaY = event.touches[0].clientY - startY;
+        handleTickDrag(deltaX, deltaY);
+      }
+
+      function handleMouseMove(event) {
+        event.preventDefault();
+        let deltaX = event.clientX - startX;
+        let deltaY = event.clientY - startY;
+        handleTickDrag(deltaX, deltaY);
+      }
+
+      let alpha_last = 0, dir = 0, cntr = 0;
+      function handleTickDrag(deltaX, deltaY) {
+        if (http_response === "")
+          return;
+        const tick_angle = 20;
+        // Do something with the distance traveled
+        var alpha = Math.atan2(deltaY, deltaX);//atan(deltaX/deltaY);
+        alpha = Math.round(180 * alpha / Math.PI);
+        ticksElement.style.transform = 'rotate(' + (alpha + 90) + 'deg)';
+        if (alpha > alpha_last) {
+          dir = 1;
+          cntr++;
+        }
+        if (alpha < alpha_last) {
+          dir = -1;
+          cntr--;
+        }
+        if (cntr % tick_angle == 0) {
+          http_request(dir, is_pressed);
+        }
+        alpha_last = alpha;
+      }
+
+      function http_request(dir, presseed) {
+        http_response = "";
+        //clearInterval(http_timer);
+        let params = new URLSearchParams();
+        params.set("dir", dir);
+        params.set("pressed", is_pressed);
+        Http.open("GET", url + params.toString());
+        Http.send();
+      }
+
+      Http.onreadystatechange = function (e) {
+        http_response = Http.responseText;
+        console.log(http_response);
+        if (http_response === "")
+          return;
+        j_response = JSON.parse(http_response);
+        if (j_response["pressed"])
+          knobElement.style.backgroundColor = "#288";
+        else
+          knobElement.style.backgroundColor = "#888";
+
+        document.getElementById("show").innerHTML = j_response["vfd"];
+        //http_timer = setInterval(http_request, j_response["refresh"]);
+      }
+
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('show').innerHTML = "Hello";
+        ticksElement = document.querySelector('.ticks');
+        ticksElement.addEventListener('touchmove', handleTouchMove);
+        ticksElement.addEventListener('mousemove', handleMouseMove);
+        knobElement = document.querySelector(".knob");
+        knobElement.addEventListener("touchstart", handleKnobTouchStart);
+        knobElement.addEventListener("mousedown", handleKnobTouchStart);
+        var rect = ticksElement.getBoundingClientRect();
+        startX = rect.left + rect.width / 2;
+        startY = rect.top + rect.height / 2;
+      });
+
+  </script>
+</head>
+
+<body>
+  <div class="rotary-encoder">
+    <div class="ticks">
+      <div class="tick"></div>
+    </div>
+    <div class="knob"></div>
+  </div>
+  <label id="show">xxx</label>
+
+</body>
+
+</html>

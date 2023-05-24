@@ -1,0 +1,117 @@
+{
+    "ssid": "hausnetz",
+    "password": "FFm30cmg?",
+    "hostname": "aiometer.local",
+    "ntpserver": "pool.ntp.org",
+    "gmtoffset_h": 1,
+    "daylightoffset_h": 1,
+    "timeformat": "%T",
+    "dateformat": "%d.%h",
+    "ledcolor_wait": [
+        128,
+        128,
+        0
+    ],
+    "ledcolor_error": [
+        128,
+        0,
+        0
+    ],
+    "queries": [
+        {
+            "alias": "time",
+            "refresh": 1,
+            "url": "http://localhost/time",
+            "get": [
+                {
+                    "time": "%s"
+                },
+                {
+                    "date": "%s"
+                }
+            ]
+        },
+        {
+            "alias": "meteo",
+            "refresh": 600,
+            "url": "https://api.open-meteo.com/v1/forecast?latitude=49.00&longitude=8.00&current_weather=true",
+            "get": [
+                {
+                    "current_weather": {
+                        "temperature": "temp  %s°c"
+                    }
+                },
+                {
+                    "current_weather": {
+                        "windspeed": "speed     %skt"
+                    }
+                },
+                {
+                    "current_weather": {
+                        "winddirection": "dir   %s°"
+                    }
+                }
+            ]
+        },
+        {
+            "alias": "sense",
+            "refresh": 600,
+            "url": "https://api.opensensemap.org/boxes/5abeb022850005001b51d92f/sensors",
+            "get": [
+                {
+                    "sensors": {
+                        "2": {
+                            "lastMeasurement": {
+                                "value":"temp   %s°c"
+                            }
+                        }
+                    }
+                },
+                {
+                    "sensors": {
+                        "3": {
+                            "lastMeasurement": {
+                                "value": "humidity   %s"
+                            }
+                        }
+                    }
+                },
+                {
+                    "sensors": {
+                        "4": {
+                            "lastMeasurement": {
+                                "value": "pressure   %s"
+                            }
+                        }
+                    }
+                }
+            ]
+        }
+    ],
+    "settings": [
+        {
+            "alias": "color",
+            "url": "http://localhost/led?hue=%s",
+            "value": 32000,
+            "step": 1023,
+            "min": 0,
+            "max": 65535
+        },
+        {
+            "alias": "bright",
+            "url": "http://localhost/led?value=%s",
+            "value": 64,
+            "step": 15,
+            "min": 0,
+            "max": 255
+        },
+        {
+            "alias": "vol",
+            "url": "http://sonoff-1507/cm?cmnd=HSBColor3 %s",
+            "value": 0,
+            "step": 10,
+            "min": 0,
+            "max": 100
+        }
+    ]
+}
