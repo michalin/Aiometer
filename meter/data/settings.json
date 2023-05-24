@@ -1,6 +1,6 @@
 {
-    "ssid": "*****",
-    "password": "******",
+    "ssid": "my wlan",
+    "password": "secret",
     "hostname": "aiometer.local",
     "ntpserver": "pool.ntp.org",
     "gmtoffset_h": 1,
