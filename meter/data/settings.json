@@ -1,6 +1,6 @@
 {
-    "ssid": "hausnetz",
-    "password": "FFm30cmg?",
+    "ssid": "*****",
+    "password": "******",
     "hostname": "aiometer.local",
     "ntpserver": "pool.ntp.org",
     "gmtoffset_h": 1,
@@ -56,7 +56,7 @@
         {
             "alias": "sense",
             "refresh": 600,
-            "url": "https://api.opensensemap.org/boxes/5abeb022850005001b51d92f/sensors",
+            "url": "https://api.opensensemap.org/boxes/<box-id>/sensors",
             "get": [
                 {
                     "sensors": {
@@ -106,7 +106,7 @@
             "max": 255
         },
         {
-            "alias": "vol",
+            "alias": "bulb",
             "url": "http://sonoff-1507/cm?cmnd=HSBColor3 %s",
             "value": 0,
             "step": 10,
