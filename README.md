@@ -1,14 +1,8 @@
 # All-In-One Meter
 ## What It Is
-This device retrieves data from public REST APIs and displays it on 6 VFD tubes. It can also control IoT devices with REST API.
-
-Public REST APIs (Application Programming Interfaces) provide a standardized method for software applications to communicate and exchange data over the Internet. These APIs are publicly accessible and enable the delivery of information from various online services, platforms, and databases. Public REST APIs are based on the REST architectural style, which relies on the HTTP protocol for data transfer and typically returns responses in widely supported formats such as JSON or XML. These APIs allow developers to leverage existing functionality, services, and resources provided by organizations, creating opportunities for integration, innovation, and new application development. 
-
-Integration with public REST APIs opens up a world of possibilities. By utilizing these APIs, the device can obtain real-time data from diverse sources such as weather services, stock markets, and environmental monitoring systems. Additionally, the device is capable of displaying the date and time.
-At the core of the meter lies an ESP32 microcontroller renowned for its versatility and connectivity capabilities. This chip provides the necessary processing power and integrates various communication protocols, making it the ideal choice for accessing REST APIs and controlling the VFD tubes simultaneously.
-The meter's visual interface is achieved through six vacuum fluorescent display (VFD) tubes. These retro-style tubes offer clear and easily readable information.
-The meter's potential extends beyond data retrieval and display—it can also function as a control hub for various IoT devices. By leveraging REST APIs designed for IoT device management, users can remotely monitor and control compatible devices. Whether it involves adjusting the temperature of a smart thermostat, managing lighting systems, or controlling home security, the meter puts the power of IoT control in the hands of the user.
-You can find a good choice of public REST APIs here: https://github.com/public-apis/public-apis
+A device that can be (almost) everything. Clock, calendar, stock ticker or weather station. The data is retrieved public REST APIs over the Internet and displayed on VFD tubes. REST stands for REpresentational State Transfer, API for Application Programming Interface. This refers to a programming interface that describes the communication between applications (e.g. apps or IoT devices) and web services in networks. You can find a good choice of public REST APIs here: https://github.com/public-apis/public-apis   
+An ESP32 handles both the connection via REST APIs and the control of the VFD tubes. The APIs to be accessed are configured in a JSON file. This provides the greatest possible flexibility. The device is controlled by a rotary encoder. This allows to select a specific web service (or its REST API) as well as the individual data points returned by it.   
+There are still large stocks of the soviet VFD tubes type IV-11, so they can be purchased cheaply via Ebay or online stores. Under the tubes are WS2812 compatible RGB LEDs, which provide a nice color accent.
 
 ## Configuration
 The device's configuration can be modified by editing the 'data/settings.json' file, which allows customization of the following parameters:
